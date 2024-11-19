@@ -3,14 +3,14 @@ from openai import OpenAI
 import json
 import random
 
+
+# Set up the Streamlit app
+st.set_page_config(page_title="Medical Simulation App", page_icon=":hospital:")
 st.secrets  # This ensures Streamlit loads the secrets file
 
 # Retrieve the API key from the secrets file
 PERPLEXITY_API_KEY = st.secrets["perplexity"]["api_key"]
 client = OpenAI(api_key=PERPLEXITY_API_KEY, base_url="https://api.perplexity.ai")
-
-# Set up the Streamlit app
-st.set_page_config(page_title="Medical Simulation App", page_icon=":hospital:")
 
 # Load patient cases from JSON file (Using absolute path as requested)
 with open(r"patient_cases.json", "r") as f:
