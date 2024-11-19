@@ -6,7 +6,6 @@ import random
 
 # Set up the Streamlit app
 st.set_page_config(page_title="Medical Simulation App", page_icon=":hospital:")
-st.secrets  # This ensures Streamlit loads the secrets file
 
 # Retrieve the API key from the secrets file
 PERPLEXITY_API_KEY = st.secrets["perplexity"]["api_key"]
