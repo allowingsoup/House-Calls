@@ -9,6 +9,9 @@ st.secrets  # This ensures Streamlit loads the secrets file
 PERPLEXITY_API_KEY = st.secrets["perplexity"]["api_key"]
 client = OpenAI(api_key=PERPLEXITY_API_KEY, base_url="https://api.perplexity.ai")
 
+# Set up the Streamlit app
+st.set_page_config(page_title="Medical Simulation App", page_icon=":hospital:")
+
 # Load patient cases from JSON file (Using absolute path as requested)
 with open(r"patient_cases.json", "r") as f:
     PATIENT_CASES = json.load(f)
@@ -56,8 +59,6 @@ def select_random_case():
     cases = list(PATIENT_CASES.keys())
     return random.choice(cases)
 
-# Set up the Streamlit app
-st.set_page_config(page_title="Medical Simulation App", page_icon=":hospital:")
 
 # Sidebar navigation
 st.sidebar.title("Navigation")
