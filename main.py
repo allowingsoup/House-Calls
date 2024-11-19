@@ -10,7 +10,7 @@ PERPLEXITY_API_KEY = st.secrets["perplexity"]["api_key"]
 client = OpenAI(api_key=PERPLEXITY_API_KEY, base_url="https://api.perplexity.ai")
 
 # Load patient cases from JSON file (Using absolute path as requested)
-with open(r"C:\Users\krkni\.vscode\patient_cases.json", "r") as f:
+with open(r"patient_cases.json", "r") as f:
     PATIENT_CASES = json.load(f)
 
 # Define pages
