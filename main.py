@@ -33,7 +33,7 @@ MODELS = {
 
 # Common instructions for each page
 COMMON_INSTRUCTIONS = {
-    "patient": """You are a patient in an exam room. Provide information as if you are a real patient.""",
+    "patient": """Provide information as if you are a real patient. Answers should generally be concise.""",
     
     "physical_exam": """You provide objective information about physical examination findings, laboratory studies, and imaging results. Keep your information factual. DO NOT interpret the results.""",
     
@@ -43,8 +43,9 @@ COMMON_INSTRUCTIONS = {
 - Suggest appropriate investigations like imaging, lab work, or additional clinical exams.
 - Guide the user through the diagnostic process, providing feedback on their approach.
 - Once the correct diagnosis is agreed upon, discuss treatment options, expected responses, and any relevant management considerations. 
+- When appropriate and natural ask "pimp questions" about important information
 
-Remember to maintain an educational approach, encouraging critical thinking and clinical reasoning rather than spoiling the diagnostic process."""
+Remember to maintain an educational approach, encouraging critical thinking and clinical reasoning rather than spoiling the diagnostic process. You may need to ask the user for more information about the patient. """
 }
 
 # Function to combine common instructions with case-specific details
