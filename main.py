@@ -8,8 +8,11 @@ import random
 st.set_page_config(page_title="Medical Simulation App", page_icon=":hospital:")
 
 # Retrieve the API key from the secrets file
-PERPLEXITY_API_KEY = st.secrets["perplexity"]["api_key"]
-client = OpenAI(api_key=PERPLEXITY_API_KEY, base_url="https://api.perplexity.ai")
+HUGGINGFACE_API_KEY = st.secrets["huggingface"]["api_key"] 
+client = OpenAI(
+    base_url="https://api-inference.huggingface.co/v1/",
+    api_key=HUGGINGFACE_API_KEY
+)
 
 # Load patient cases from JSON file (Using absolute path as requested)
 with open(r"patient_cases.json", "r") as f:
@@ -26,10 +29,11 @@ PAGES = {
 
 # Define models for each page
 MODELS = {
-    "patient": "llama-3.1-8b-instruct",
-    "physical_exam": "llama-3.1-8b-instruct",
-    "attending_physician": "llama-3.1-70b-instruct"
+    "patient": "meta-llama/Llama-3.2-11B-Instruct",  # Update with appropriate HuggingFace model
+    "physical_exam": "meta-llama/Llama-3.2-11B-Instruct",
+    "attending_physician": "meta-llama/Llama-3.3-70B-Instruct"
 }
+
 
 # Common instructions for each page
 COMMON_INSTRUCTIONS = {
