@@ -68,7 +68,21 @@ if selection == "About":
     st.write("""
     Welcome to House Calls - The Diagnostic Challenge! Here, students can practice patient encounters through interactive chat simulations. Experience different aspects of patient care from initial consultation to diagnosis and management under the guidance of simulated physicians.
     """)
-    # Additional content as in the original code...
+    st.subheader("How to Use the App")
+    st.markdown("""
+    - **Select a Case**: Navigate to the 'Select Case' page to choose or randomly select a medical case to simulate.
+    - **Interact with the Patient**: On the 'Patient' page, you can gather patient history as if you were conducting an actual consultation.
+    - **Perform Physical Exam & Diagnostics**: Here, you'll receive objective information on physical examination findings, lab results, and imaging. Use this to make differential diagnoses.
+    - **Consult with the Attending Physician**: Get guidance, suggest appropriate investigations, and discuss potential diagnoses and treatments with an experienced physician simulation.
+    - **Start a New Case**: Use the 'New Case' button in the sidebar to reset the simulation for a fresh start.
+    
+    After going through a case, you can choose another or select a random one for more practice. Your goal is to diagnose the patient by synthesizing the information provided through each interaction.
+    """)
+    st.markdown("Please [take this survey](https://rvu.qualtrics.com/jfe/form/SV_bQTnsSPyFuNWsKy) to help us improve the app!")
+    st.subheader("Disclaimer")
+    st.markdown("""
+    **House Calls - The Diagnostic Challenge** is an educational tool intended for medical students and practitioners to practice clinical reasoning. The information provided here is for educational purposes only and should not be used for real patient care. Always consult with a licensed healthcare provider for actual medical diagnosis and treatment. Use of this app does not create a doctor-patient relationship, nor does it guarantee diagnostic accuracy or replace the need for professional medical judgment.
+    """)
 
 elif selection == "Select Case":
     st.title("Select a Patient Case")
@@ -90,8 +104,12 @@ elif selection in ["Patient", "Physical Exam & Diagnostics", "Attending Physicia
     else:
         page = PAGES[selection]
         st.title(f"{selection} Encounter")
+
+        # Initialize session state for messages
         if f"{page}_messages" not in st.session_state:
             st.session_state[f"{page}_messages"] = []
+
+        # Add system message to the start of the conversation
         if not st.session_state[f"{page}_messages"]:
             case_info = PATIENT_CASES.get(st.session_state.selected_case, {})
             if case_info:
@@ -99,28 +117,40 @@ elif selection in ["Patient", "Physical Exam & Diagnostics", "Attending Physicia
                 st.session_state[f"{page}_messages"].append({"role": "system", "content": system_message})
             else:
                 st.error(f"No case information found for this case ({st.session_state.selected_case}). Please select a valid case.")
+
+        # Display previous messages
         for message in st.session_state[f"{page}_messages"]:
             if message["role"] in ["user", "assistant"]:
                 with st.chat_message(message["role"]):
                     st.markdown(message["content"])
+
+        # Get user input
         if prompt := st.chat_input("Interact with the patient, perform diagnostics or discuss with the attending physician:"):
+            # Add user message to the session state
             st.session_state[f"{page}_messages"].append({"role": "user", "content": prompt})
             with st.chat_message("user"):
                 st.markdown(prompt)
-            prompt = ""
+
+            # Construct the prompt for the model
+            prompt_for_model = ""
             for message in st.session_state[f"{page}_messages"]:
                 if message["role"] == "system":
-                    prompt += "System: " + message["content"] + "\n\n"
+                    prompt_for_model += "System: " + message["content"] + "\n\n"
                 elif message["role"] == "user":
-                    prompt += "User: " + message["content"] + "\n\n"
+                    prompt_for_model += "User: " + message["content"] + "\n\n"
                 elif message["role"] == "assistant":
-                    prompt += "Assistant: " + message["content"] + "\n\n"
-            response = client.text_generation(
-                inputs=prompt,
-                model=MODELS[page],
-                max_length=500
-            )
-            assistant_response = response.generated_text.strip()
-            st.session_state[f"{page}_messages"].append({"role": "assistant", "content": assistant_response})
-            with st.chat_message("assistant"):
-                st.markdown(assistant_response)
+                    prompt_for_model += "Assistant: " + message["content"] + "\n\n"
+
+            # Generate the assistant's response
+            try:
+                response = client.text_generation(
+                    prompt=prompt_for_model,
+                    model=MODELS[page],
+                    max_new_tokens=500
+                )
+                assistant_response = response.strip()
+                st.session_state[f"{page}_messages"].append({"role": "assistant", "content": assistant_response})
+                with st.chat_message("assistant"):
+                    st.markdown(assistant_response)
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
