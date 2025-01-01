@@ -25,9 +25,9 @@ PAGES = {
 
 # Define models for each page
 MODELS = {
-    "patient": "meta-llama/Llama-3.2-11B-Vision-Instruct",
-    "physical_exam": "meta-llama/Llama-3.2-11B-Vision-Instruct",
-    "attending_physician": "meta-llama/Llama-3.2-11B-Vision-Instruct"
+    "patient": "mistralai/Mistral-Nemo-Instruct-2407",
+    "physical_exam": "mistralai/Mistral-Nemo-Instruct-2407",
+    "attending_physician": "mistralai/Mistral-Nemo-Instruct-2407"
 }
 
 # Common instructions for each page
