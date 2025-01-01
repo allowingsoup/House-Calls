@@ -31,7 +31,7 @@ PAGES = {
 MODELS = {
     "patient": "meta-llama/Llama-3.2-11B-Instruct",  # Update with appropriate HuggingFace model
     "physical_exam": "meta-llama/Llama-3.2-11B-Instruct",
-    "attending_physician": "meta-llama/Llama-3.3-70B-Instruct"
+    "attending_physician": "meta-llama/Llama-3.2-11B-Instruct"
 }
 
 
